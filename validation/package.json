@@ -3,7 +3,7 @@
     "zod": "^3.24.2"
   },
   "name": "@om_wadhi/validation",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
