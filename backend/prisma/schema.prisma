@@ -20,7 +20,7 @@ model User {
   email    String   @unique
   googleId String?
   password String?
-  role     Role?     @default(User)
+  role     Role?    @default(User)
   Review   Review[]
 }
 
@@ -30,13 +30,23 @@ enum Role {
 }
 
 model Book {
-  bookId    String   @id @unique @default(uuid())
-  bookName  String
-  author    String
-  bookImage String
-  brief     String
-  rating    Int
-  Review    Review[]
+  id          String   @id @unique @default(uuid())
+  bookName    String
+  author      String
+  bookImage   String
+  brief       String
+  description String
+  Genre       Genre
+  rating      Int      @default(0)
+  Review      Review[]
+}
+
+enum Genre {
+  Fiction
+  NonFiction
+  Thriller
+  Drama
+  Autobiography
 }
 
 model Review {
@@ -44,7 +54,7 @@ model Review {
   bookId String
   userId String
   review String
-  book   Book   @relation(fields: [bookId], references: [bookId])
+  book   Book   @relation(fields: [bookId], references: [id])
   user   User   @relation(fields: [userId], references: [id])
 
   @@unique([userId, bookId])
