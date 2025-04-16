@@ -20,7 +20,7 @@ model User {
   email    String   @unique
   googleId String?
   password String?
-  role     Role?
+  role     Role?     @default(User)
   Review   Review[]
 }
 
@@ -46,5 +46,6 @@ model Review {
   review String
   book   Book   @relation(fields: [bookId], references: [bookId])
   user   User   @relation(fields: [userId], references: [id])
+
   @@unique([userId, bookId])
 }

@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { router as authRoutes} from "./routes/AuthRoutes/google-route";
+import {router as authRoutes} from "./routes/AuthRoutes/route"
 import passport from "passport";
 import { router } from "./routes/main-routes";
 
