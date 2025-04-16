@@ -1,0 +1,1 @@
+so we have decided to retain the "role" within user schema but make it optional and i will have a test email and password marked as admin. 
