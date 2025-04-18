@@ -1,0 +1,14 @@
+import { motion } from "motion/react"
+
+type Props = {
+    text: string
+    className: string
+    onclick: () => void
+}
+export const Button = ({ text, className, onclick }: Partial<Props>) => {
+    return (
+        <motion.button initial={{ opacity: 0,}} animate={{ opacity: 1}} transition={{ duration: 0.5, ease: "easeInOut", delay : 0.6 }} onClick={onclick} className={`z-20 w-[280px] h-[35px] text-center p-1  bg-white rounded-lg transition ease-in-out hover:scale-95 shadow-inputBox text-black font-medium outline-none ${className} `}>
+            <p>{text}</p>
+        </motion.button>
+    )
+}

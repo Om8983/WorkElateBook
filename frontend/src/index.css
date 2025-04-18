@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@theme {
+  --breakpoint-sm: 375px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+}
+@layer utilities {
+  .bg-brad {
+    background-image: linear-gradient(
+      90deg,
+      hsla(340, 100%, 58%, 1) 0%,
+      hsla(266, 74%, 55%, 1) 100%,
+      hsla(340, 100%, 58%, 1)
+    );
+  }
+  .shadow-inputBox {
+    box-shadow: 8px 12px 50px 11px rgba(0, 0, 0, 0.1),
+      -7px 7px 50px 11px rgba(0, 0, 0, 0.1);
+  }
+}
