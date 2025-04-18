@@ -6,6 +6,8 @@ import { userLoginSchema, userSignUpSchema } from "@om_wadhi/validation";
 import { loginSchemaValidation, signupSchemaValidation } from "../../zod";
 import jwt from "jsonwebtoken";
 const router = Router();
+
+// google authentication
 router.get("/google", userScope);
 router.get("/google/callback", passportAuth, authFunction);
 
@@ -93,7 +95,7 @@ router.post(
         },
       });
       if (!existingUser) {
-        res.status(401).json({ msg: "user doesn't exist" });
+        res.status(404).json({ msg: "User doesn't exist. Please SignUp" });
         return;
       }
 
@@ -146,11 +148,10 @@ router.post(
         httpOnly: true,
         secure: true,
       });
-      res.status(200).json({ msg: "user login success" });
+      res.status(200).json({ msg: "user login success" , user});
       return;
     } catch (error) {
       res.status(500).json({ msg: "Error occured while login" });
-      console.log(error);
       
       return;
     }

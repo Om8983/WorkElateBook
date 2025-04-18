@@ -54,7 +54,7 @@ router.post(
       return;
     } catch (error) {
       res.status(500).json({ msg: "Unable to post Review!" });
-      console.log(error);
+
       return;
     }
   }

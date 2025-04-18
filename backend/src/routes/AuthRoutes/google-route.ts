@@ -43,15 +43,11 @@ export const authFunction = function (req: Request, res: Response) {
 
     res.cookie("accessToken", accessToken, {
       maxAge: 15 * 60 * 1000,
-      secure: true,
-      httpOnly: true,
     });
     res.cookie("refreshToken", refreshToken, {
       maxAge: 24 * 60 * 60,
-      httpOnly: true,
-      secure: true,
     });
-    res.status(200).json({ msg: "User Login Successfull" });
+    res.status(200).redirect("http://localhost:5173/discover")
     return;
   } catch (error) {
     res.status(500).redirect("/auth/login");

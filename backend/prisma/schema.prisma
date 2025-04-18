@@ -34,7 +34,7 @@ model Book {
   bookName    String
   author      String
   bookImage   String
-  brief       String
+  brief       String?
   description String
   Genre       Genre
   rating      Int      @default(0)

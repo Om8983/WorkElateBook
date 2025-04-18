@@ -6,7 +6,7 @@ export const loginSchemaValidation = (schema: ZodSchema) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const response = schema.safeParse(req.body);
     if (!response.success) {
-      res.status(401).json({ msg: "Invalid User Login Credentials" });
+      res.status(403).json({ msg: "Invalid User Login Credentials" });
       return;
     }
     response.data = req.body;
@@ -18,7 +18,7 @@ export const signupSchemaValidation = (schema: ZodSchema) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const response = schema.safeParse(req.body);
     if (!response.success) {
-      res.status(401).json({ msg: "Invalid User SignUp Credentials" });
+      res.status(403).json({ msg: "Invalid User SignUp Credentials" });
       return;
     }
     req.body = response.data;
@@ -43,6 +43,7 @@ export const infoUpdateSchema = (schema: ZodSchema) => {
 export const bookSchemaValidate = (schema: ZodSchema) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const response = schema.safeParse(req.body);
+    
     if (!response.success) {
       res.status(401).json({ msg: "Invalid Book Schema" });
       return;

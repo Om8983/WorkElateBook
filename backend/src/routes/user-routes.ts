@@ -7,7 +7,7 @@ import { userInfoUpdateSchema } from "@om_wadhi/validation";
 const router = Router();
 type UserUpdate = {
   username: string;
-  email: string;
+  email ?: string;
 };
 
 // GET /users/:id - Retrieve user profile
@@ -45,7 +45,8 @@ router.put(
       const result = await prisma.$transaction(async (tsx) => {
         const existingEmail = await tsx.user.findUnique({
           where: {
-            email: dataToUpdate.email,
+            id: userId,
+            email : dataToUpdate.email,
           },
         });
         if (existingEmail) {
@@ -74,7 +75,6 @@ router.put(
       return;
     } catch (error) {
       res.status(500).json({ msg: "Error while updating user info" });
-      console.log(error);
       return;
     }
   }

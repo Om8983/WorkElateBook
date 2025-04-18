@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import { bookSchemaValidate } from "../zod";
 import { newBookSchema } from "@om_wadhi/validation";
 import { Genre } from "../../app/generated/prisma/client";
+import { upload } from "../multer";
 const router = Router();
 
 type DecodedData = {
@@ -24,7 +25,9 @@ type NewBook = {
 // GET /books - Retrieve all books (with pagination)
 router.get("/", async (req: Request, res: Response) => {
   try {
-    const books = await prisma.book.findMany({
+    const { cursor, limit = "5" } = req.query;
+    const query = {
+      take: parseInt(limit as string),
       select: {
         id: true,
         bookName: true,
@@ -33,8 +36,37 @@ router.get("/", async (req: Request, res: Response) => {
         author: true,
         Genre: true,
       },
+    };
+
+    const cursorQuery = {
+      take: parseInt(limit as string),
+      skip: 1,
+      cursor: {
+        id: cursor,
+      },
+      select: {
+        id: true,
+        bookName: true,
+        bookImage: true,
+        brief: true,
+        author: true,
+        Genre: true,
+      },
+    };
+
+    const allBooks = await prisma.book.findMany(cursor ? cursorQuery : query);
+    if (allBooks.length === 0) {
+      res.status(200).json({ msg: "No blogs are posted" });
+      return;
+    }
+    res.status(200).json({
+      msg: "Fetched Books successfully",
+      allBooks,
+      nextCursor:
+        allBooks.length === 5 ? allBooks[allBooks.length - 1].id : null,
+      hasMore: allBooks.length === parseInt(limit as string),
     });
-    res.status(200).json({ msg: "Fetched Books successfully", books });
+    return;
   } catch (error) {
     res.status(500).json({ msg: "Error fetching books" });
     return;
@@ -83,13 +115,13 @@ router.get("/:id", async (req: Request, res: Response) => {
 router.post(
   "/",
   tokenValidation,
-  bookSchemaValidate(newBookSchema),
+  upload.single("bookImage"),
   async (req: Request, res: Response) => {
     try {
       const { accessToken } = req.cookies;
 
       const decoded = jwt.decode(accessToken) as DecodedData;
-      if (decoded.role !== "User") {
+      if (decoded.role !== "Admin") {
         res.status(400).json({ msg: "Unknown user detected!" });
         return;
       }
@@ -97,7 +129,7 @@ router.post(
       const newBook = await prisma.book.create({
         data: {
           bookName: bookDetails.bookName,
-          bookImage: bookDetails.bookImage,
+          bookImage: (req.file as any).path,
           author: bookDetails.author,
           description: bookDetails.description,
           brief: bookDetails.brief,
@@ -105,6 +137,7 @@ router.post(
         },
       });
       res.status(200).json({ msg: "Book Added Successfully" });
+        return ;
     } catch (error) {
       res.status(500).json({ msg: "error adding a new book" });
       return;
